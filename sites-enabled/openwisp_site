@@ -1,0 +1,60 @@
+server default {
+	api_token_header = "Authorization: Bearer 2463f97d-bd0e-4c29-9ccc-f845c96571d1 & 3IqS4FcoXeBsMwCWFrcVdpWAc9et6FSd" 
+    listen {
+        type = auth
+        ipaddr = *
+        port = 0
+        limit {
+            max_connections = 16
+            lifetime = 0
+            idle_timeout = 30
+        }
+    }
+
+    listen {
+        ipaddr = *
+        port = 0
+        type = acct
+        limit {}
+    }
+
+    authorize {
+	update control { &REST-HTTP-Header += "${...api_token_header}" }
+        rest
+        sql
+	dailycounter
+        dailybandwidthcounter
+        noresetcounter
+    }
+
+    authenticate {
+    }
+
+    
+    preacct {
+        preprocess
+        acct_unique
+        suffix
+        files
+    }
+
+    accounting {
+	update control { &REST-HTTP-Header += "${...api_token_header}" }
+        rest
+    }
+
+    session {}
+
+    post-auth {
+	update control { &REST-HTTP-Header += "${...api_token_header}" }
+        rest
+
+        Post-Auth-Type REJECT {
+	    update control { &REST-Http-Header += "${....api_token_header}" }
+            rest
+        }
+    }
+
+    pre-proxy {}
+    post-proxy {}
+}
