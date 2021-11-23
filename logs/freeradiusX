@@ -1,0 +1,62 @@
+(0) Received Access-Request Id 203 from {PUBLIC-IP-OF-CLIENT}:50130 to 192.168.105.97:1812 length 79
+(0)   Service-Type = Authenticate-Only
+(0)   User-Name = "TestUser"
+(0)   User-Password = "TestPassword123_"
+(0)   NAS-Port-Type = Wireless-802.11
+(0)   NAS-Identifier = "firewallH23"
+(0)   NAS-Port = 0
+(0)   NAS-IP-Address = {PUBLIC-IP-OF-CLIENT}
+(0) # Executing section authorize from file /etc/freeradius/3.0/sites-enabled/openwisp_site
+(0)   authorize {
+(0)     update control {
+(0)       &REST-HTTP-Header += "Authorization: Bearer 2463f97d-bd0e-4c29-9ccc-f845c96571d1 & 3IqS4FcoXeBsMwCWFrcVdpWAc9et6FSd"
+(0)     } # update control = noop
+rlm_rest (rest): Reserved connection (0)
+(0) rest: Expanding URI components
+(0) rest: EXPAND https://radius.domainplaceholder.de
+(0) rest:    --> https://radius.domainplaceholder.de
+(0) rest: EXPAND /api/v1/freeradius/authorize/
+(0) rest:    --> /api/v1/freeradius/authorize/
+(0) rest: Sending HTTP POST to "https://radius.domainplaceholder.de/api/v1/freeradius/authorize/"
+(0) rest: EXPAND {"username": "%{User-Name}", "password": "%{User-Password}"}
+(0) rest:    --> {"username": "TestUser", "password": "TestPassword123_"}
+(0) rest: Processing response header
+(0) rest:   Status : 403 (Forbidden)
+(0) rest:   Type   : json (application/json)
+(0) rest: ERROR: Server returned:
+(0) rest: ERROR: {"detail":"Token authentication failed"}
+rlm_rest (rest): Released connection (0)
+(0)     [rest] = userlock
+(0)   } # authorize = userlock
+(0) Invalid user (rest: Server returned:): [TestUser] (from client firewallH23 port 0)
+(0) Using Post-Auth-Type Reject
+(0) # Executing group from file /etc/freeradius/3.0/sites-enabled/openwisp_site
+(0)   Post-Auth-Type REJECT {
+(0)     update control {
+(0)       &REST-Http-Header += "Authorization: Bearer 2463f97d-bd0e-4c29-9ccc-f845c96571d1 & 3IqS4FcoXeBsMwCWFrcVdpWAc9et6FSd"
+(0)     } # update control = noop
+rlm_rest (rest): Reserved connection (1)
+(0) rest: Expanding URI components
+(0) rest: EXPAND https://radius.domainplaceholder.de
+(0) rest:    --> https://radius.domainplaceholder.de
+(0) rest: EXPAND /api/v1/freeradius/postauth/
+(0) rest:    --> /api/v1/freeradius/postauth/
+(0) rest: Sending HTTP POST to "https://radius.domainplaceholder.de/api/v1/freeradius/postauth/"
+(0) rest: EXPAND {"username": "%{User-Name}", "password": "%{User-Password}", "reply": "%{reply:Packet-Type}", "called_station_id": "%{Called-Station-ID}", "calling_station_id": "%{Calling-Station-ID}"}
+(0) rest:    --> {"username": "TestUser", "password": "TestPassword123_", "reply": "Access-Reject", "called_station_id": "", "calling_station_id": ""}
+(0) rest: Processing response header
+(0) rest:   Status : 403 (Forbidden)
+(0) rest:   Type   : json (application/json)
+(0) rest: ERROR: Server returned:
+(0) rest: ERROR: {"detail":"Token authentication failed"}
+rlm_rest (rest): Released connection (1)
+(0)     [rest] = invalid
+(0)   } # Post-Auth-Type REJECT = invalid
+(0) Delaying response for 1.000000 seconds
+Waking up in 0.1 seconds.
+Waking up in 0.8 seconds.
+(0) Sending delayed response
+(0) Sent Access-Reject Id 203 from 192.168.105.97:1812 to {PUBLIC-IP-OF-CLIENT}:50130 length 20
+Waking up in 3.9 seconds.
+(0) Cleaning up request packet ID 203 with timestamp +48
+Ready to process requests
